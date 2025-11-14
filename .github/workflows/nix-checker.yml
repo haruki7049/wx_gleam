@@ -1,13 +1,12 @@
-name: test
+name: nix-checker
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
+
+permissions: {}
 
 jobs:
-  test:
+  run-nix-check:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
@@ -19,7 +18,5 @@ jobs:
         uses: cachix/install-nix-action@v31.6.0
         with:
           nix_path: nixpkgs=channel:nixos-unstable
-
-      - run: nix develop -L --command sh -c 'gleam deps download'
-      - run: nix develop -L --command sh -c 'gleam test'
-      - run: nix develop -L --command sh -c 'gleam format --check src test'
+      - name: Run nix flake check
+        run: nix flake check --all-systems
