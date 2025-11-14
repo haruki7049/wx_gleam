@@ -20,6 +20,16 @@ pub fn init_wx() -> Result(WxApp, dynamic.Dynamic) {
   internals.init_wx()
 }
 
+pub fn with_app(mainloop: fn(WxApp) -> Nil) -> Nil {
+  let assert Ok(app): Result(WxApp, dynamic.Dynamic) = init_wx()
+
+  // Then run mainloop which is defined by User
+  mainloop(app)
+
+  // When all processes are done, run destroy()
+  destroy()
+}
+
 pub fn create_frame(app: WxApp, title: String) -> Result(WxFrame, Nil) {
   internals.create_frame(app, title)
   |> result.map_error(fn(_) { Nil })
