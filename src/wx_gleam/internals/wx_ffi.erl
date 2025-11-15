@@ -65,11 +65,11 @@ create_frame(WxApp, Title) ->
 %%% This function shows the specified frame, making it visible to the user.
 %%%
 %%% @param Frame The frame reference to show
-%%% @returns `ok'
+%%% @returns `nil'
 %%% @end
 show_frame(Frame) ->
     wxFrame:show(Frame),
-    ok.
+    nil.
 
 
 %%% @doc Create a button widget with the specified label.
@@ -97,11 +97,11 @@ create_button(Frame, ID, Label) ->
 %%% be received and handled by the application.
 %%%
 %%% @param Frame The frame to connect the close event to
-%%% @returns `ok'
+%%% @returns `nil'
 %%% @end
 connect_close_event(Frame) ->
     wxFrame:connect(Frame, close_window),
-    ok.
+    nil.
 
 
 %%% @doc Wait for and handle messages, including close events.
@@ -111,13 +111,13 @@ connect_close_event(Frame) ->
 %%% After handling non-close messages, it recursively waits for more messages.
 %%%
 %%% @param Handler A function that will be called with any non-close messages
-%%% @returns `ok' when a close event is received
+%%% @returns `nil' when a close event is received
 %%% @end
 await_close_message(Handler) ->
     receive
         % Message matching wxEVT_CLOSE_WINDOW - exit the receive loop
         #wx{event = #wxClose{}} ->
-            ok;
+            nil;
         % Any other message - pass to the handler and continue waiting
         OtherMessage ->
             % Call the Gleam function (Handler) with the message
@@ -132,8 +132,8 @@ await_close_message(Handler) ->
 %%% This function destroys the wx server instance and should be called
 %%% when the application is shutting down to properly clean up resources.
 %%%
-%%% @returns `ok'
+%%% @returns `nil'
 %%% @end
 destroy() ->
     wx:destroy(),
-    ok.
+    nil.
