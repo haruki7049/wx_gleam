@@ -22,13 +22,6 @@ import gleam/dynamic
 import gleam/result
 import wx_gleam/internals
 
-// --- Helper functions ---
-
-/// Maps any error to Nil, hiding internal error details from the public API.
-fn map_error_to_nil(result: Result(a, b)) -> Result(a, Nil) {
-  result.map_error(result, fn(_) { Nil })
-}
-
 // --- Type definitions ---
 
 /// Represents a wxWidgets application instance.
@@ -172,4 +165,11 @@ pub fn await_close_message(handler: fn(dynamic.Dynamic) -> Nil) -> Nil {
 /// clean up resources.
 pub fn destroy() -> Nil {
   internals.destroy()
+}
+
+// --- Internal helper functions ---
+
+/// Maps any error to Nil, hiding internal error details from the public API.
+fn map_error_to_nil(result: Result(a, b)) -> Result(a, Nil) {
+  result.map_error(result, fn(_) { Nil })
 }
