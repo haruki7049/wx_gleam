@@ -3,23 +3,21 @@ name: test
 on:
   push:
     branches:
+      - master
       - main
   pull_request:
 
 jobs:
   test:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install Nix
-        uses: cachix/install-nix-action@v31.6.0
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
         with:
-          nix_path: nixpkgs=channel:nixos-unstable
-
-      - run: nix develop -L --command sh -c 'gleam deps download'
-      - run: nix develop -L --command sh -c 'gleam test'
-      - run: nix develop -L --command sh -c 'gleam format --check src test'
+          otp-version: "28.1.1"
+          gleam-version: "1.13.0"
+          #rebar3-version: "3"
+          # elixir-version: "1"
+      - run: gleam deps download
+      - run: gleam test
+      - run: gleam format --check src test
