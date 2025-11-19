@@ -15,8 +15,7 @@
 //// by the main wx_gleam module to provide type-safe event handlers to users.
 //// However, you can also use them directly if you need custom event handling.
 
-import gleam/dynamic
-import gleam/dynamic/decode
+import gleam/dynamic.{type Dynamic}
 import gleam/string
 
 /// Represents the type of close event.
@@ -102,11 +101,11 @@ pub type CloseEvent {
 /// Most users will not call this function directly. Instead, use the
 /// `await_close_event` function in the main wx_gleam module, which handles
 /// decoding automatically and provides a typed handler interface.
-pub fn decode_close_event(msg: dynamic.Dynamic) -> Result(CloseEvent, String) {
+pub fn decode_close_event(msg: Dynamic) -> Result(CloseEvent, String) {
   // Decoder for 2-element tuples where both elements are strings (atoms decode to strings)
-  let tuple_decoder = decode.tuple2(decode.string, decode.string)
+  let tuple_decoder = dynamic.tuple2(dynamic.string, dynamic.string)
 
-  case decode.run(msg, tuple_decoder) {
+  case tuple_decoder(msg) {
     Ok(#("close", type_str)) -> {
       // Decode the type string to CloseEventType
       case type_str {
