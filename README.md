@@ -9,6 +9,24 @@ A Gleam library for creating native GUIs using Erlang's wxWidgets (`wx`) binding
 
 The core logic is implemented in Erlang (`src/wx_gleam/internals/wx_ffi.erl`) and exposed to Gleam through FFI definitions (`src/wx_gleam/internals.gleam`).
 
+## Features
+
+✅ **Native GUI**: Uses wxWidgets for truly native look and feel on all platforms  
+✅ **Cross-Platform**: Works on Linux, macOS, and Windows  
+✅ **Type-Safe**: Leverages Gleam's type system for compile-time safety  
+✅ **Minimal Overhead**: Thin wrapper with minimal abstractions  
+✅ **Erlang Integration**: Seamlessly integrates with the BEAM ecosystem  
+
+## Current Limitations
+
+⚠️ **Work in Progress**: This library is still in early development  
+⚠️ **Limited Widgets**: Currently supports basic frames and buttons only  
+⚠️ **No Event Handlers**: Button click events are not yet implemented  
+⚠️ **Not on Hex**: Must be used as a path dependency for now  
+⚠️ **Basic Layout**: No layout managers yet (widgets use default positioning)  
+
+Future development will expand widget support and add more wxWidgets functionality.
+
 ## Project Goals
 
 - **Goal**: To be able to write code in Gleam that is equivalent to using Erlang's `wx` module.
@@ -296,6 +314,61 @@ sudo apt-get install xvfb
 xvfb-run gleam run
 ```
 
+## Contributing
+
+Contributions are welcome! Here's how you can help:
+
+### Reporting Issues
+
+If you find a bug or have a feature request:
+
+1. Check if an issue already exists in the [issue tracker](https://github.com/haruki7049/wx_gleam/issues)
+2. If not, create a new issue with:
+   - A clear description of the problem or feature
+   - Steps to reproduce (for bugs)
+   - Your environment details (OS, Gleam version, Erlang version)
+
+### Submitting Changes
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes following the project's style:
+   - Add documentation comments for new functions
+   - Follow existing code patterns
+   - Keep changes minimal and focused
+4. Format your code:
+   ```sh
+   gleam format
+   ```
+5. Run tests to ensure nothing breaks:
+   ```sh
+   gleam test
+   ```
+6. Commit your changes with clear messages
+7. Push to your fork and create a pull request
+
+### Development Guidelines
+
+- **Documentation**: All public functions must have doc comments
+- **Testing**: Add tests for new functionality when practical
+- **Type Safety**: Leverage Gleam's type system for safety
+- **Minimal Abstraction**: Follow the project goal of minimal abstractions
+- **FFI Changes**: Be careful when modifying FFI code - test thoroughly
+
+## See Also
+
+### Related Documentation
+
+- [Gleam Language Tour](https://tour.gleam.run/) - Learn Gleam basics
+- [Erlang wx Documentation](https://www.erlang.org/doc/man/wx.html) - Official wx module docs
+- [wxWidgets Documentation](https://docs.wxwidgets.org/) - wxWidgets C++ library docs
+- [Gleam Erlang Target Guide](https://gleam.run/writing-gleam/gleam-erlang/) - Gleam-Erlang interop
+
+### Similar Projects
+
+- [wxErlang Examples](https://github.com/erlang/otp/tree/master/lib/wx/examples) - Official Erlang wx examples
+- [Gleam Packages](https://packages.gleam.run/) - Discover other Gleam packages
+
 ## License
 
-This project is licensed under the **MIT License**.
+This project is licensed under the **MIT License**. See [LICENSE](LICENSE) for details.
