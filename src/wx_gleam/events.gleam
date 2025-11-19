@@ -104,31 +104,40 @@ pub type CloseEvent {
 /// decoding automatically and provides a typed handler interface.
 pub fn decode_close_event(msg: dynamic.Dynamic) -> Result(CloseEvent, String) {
   // Decoder for the close event type atom
-  let close_type_decoder = fn(type_atom: dynamic.Dynamic) -> Result(CloseEventType, List(dynamic.DecodeError)) {
+  let close_type_decoder = fn(type_atom: dynamic.Dynamic) -> Result(
+    CloseEventType,
+    List(dynamic.DecodeError),
+  ) {
     decode.run(type_atom, decode.string)
     |> Result.then(fn(type_str) {
       case type_str {
         "close_window" -> Ok(CloseWindow)
         "end_session" -> Ok(EndSession)
         "query_end_session" -> Ok(QueryEndSession)
-        _ -> Error([dynamic.DecodeError(
-          expected: "close_window, end_session, or query_end_session",
-          found: type_str,
-          path: ["close event type"]
-        )])
+        _ ->
+          Error([
+            dynamic.DecodeError(
+              expected: "close_window, end_session, or query_end_session",
+              found: type_str,
+              path: ["close event type"],
+            ),
+          ])
       }
     })
   }
-  
+
   // Decode the {close, Type} tuple
   let tuple_decoder = decode.tuple2(decode.string, close_type_decoder)
-  
+
   case decode.run(msg, tuple_decoder) {
     Ok(#("close", event_type)) -> Ok(Close(event_type))
     Error(_decode_errors) -> {
       // When decoding fails, provide a helpful error message with the raw value
       let raw = string.inspect(msg)
-      Error("Failed to decode close event. Expected {close, Type} tuple. Raw value: " <> raw)
+      Error(
+        "Failed to decode close event. Expected {close, Type} tuple. Raw value: "
+        <> raw,
+      )
     }
   }
 }
