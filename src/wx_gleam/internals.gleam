@@ -1,30 +1,50 @@
 //// Internal FFI bindings for wxWidgets functionality.
 ////
 //// This module contains the low-level Foreign Function Interface (FFI) bindings
-//// to the Erlang wx module. These functions are wrapped by the public API in
-//// the main wx_gleam module.
+//// to the Erlang wx module. These functions provide direct access to the Erlang
+//// implementation in `wx_ffi.erl` and are wrapped by the more user-friendly
+//// public API in the main wx_gleam module.
+////
+//// ## For Library Users
 ////
 //// **Note:** Users should generally use the functions in the wx_gleam module
-//// instead of calling these internal functions directly.
+//// instead of calling these internal functions directly. The public API provides
+//// better error handling, more convenient function signatures, and higher-level
+//// abstractions.
+////
+//// ## For Library Developers
+////
+//// This module defines:
+//// - Opaque types for wx objects (WxApp, WxFrame, WxButton)
+//// - FFI function declarations using the `@external` attribute
+//// - Direct mappings to Erlang wx_ffi module functions
+////
+//// All functions in this module return `Result` types with `dynamic.Dynamic`
+//// errors or `Nil` for operations that don't fail. The public API in wx_gleam
+//// wraps these to provide more user-friendly error types.
 
 import gleam/dynamic
 
 /// Opaque type representing a wxWidgets application instance.
 ///
 /// This type is implemented in Erlang and represents the underlying wx
-/// application object.
+/// application object (the wx server process). It is an opaque reference
+/// that cannot be constructed directly in Gleam - it must be obtained through
+/// the `init_wx()` FFI function.
 pub type WxApp
 
 /// Opaque type representing a wxWidgets frame (window).
 ///
 /// This type is implemented in Erlang and represents the underlying wx
-/// frame object.
+/// frame object. It is an opaque reference to a wxFrame widget in the
+/// Erlang wx system.
 pub type WxFrame
 
 /// Opaque type representing a wxWidgets button control.
 ///
 /// This type is implemented in Erlang and represents the underlying wx
-/// button object.
+/// button object. It is an opaque reference to a wxButton widget in the
+/// Erlang wx system.
 pub type WxButton
 
 /// Initializes the wxWidgets application via FFI.
