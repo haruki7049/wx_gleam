@@ -50,9 +50,9 @@
 %%%   <li>If startup fails, return `{error, Reason}'</li>
 %%% </ol>
 %%%
-%%% @returns `{ok, WxApp}' on success, where WxApp is the wx server reference,
-%%%          or `{error, Reason}' if the wx application cannot be started
-%%%          (e.g., if it's already running or if wxWidgets is not available)
+%%% @return `{ok, WxApp}' on success, where WxApp is the wx server reference,
+%%%         or `{error, Reason}' if the wx application cannot be started
+%%%         (e.g., if it's already running or if wxWidgets is not available)
 %%% @end
 init_wx() ->
     % Check the return value of application:start to handle already-started case
@@ -87,8 +87,8 @@ init_wx() ->
 %%%
 %%% @param WxApp The wx application instance from `init_wx/0'
 %%% @param Title The window title as a binary string (Gleam String)
-%%% @returns `{ok, Frame}' with the created frame reference. The frame is
-%%%          guaranteed to be valid and ready to use.
+%%% @return `{ok, Frame}' with the created frame reference. The frame is
+%%%         guaranteed to be valid and ready to use.
 %%% @end
 create_frame(WxApp, Title) ->
     % Convert Gleam's String (Binary) to Erlang's String (List) for the title
@@ -107,7 +107,7 @@ create_frame(WxApp, Title) ->
 %%% the operating system's window manager.
 %%%
 %%% @param Frame The frame reference to show (obtained from `create_frame/2')
-%%% @returns `ok' - This operation always succeeds for a valid frame reference
+%%% @return `ok' - This operation always succeeds for a valid frame reference
 %%% @end
 show_frame(Frame) ->
     wxFrame:show(Frame),
@@ -135,8 +135,8 @@ show_frame(Frame) ->
 %%% @param Frame The parent frame that will contain the button
 %%% @param ID The widget ID (use -1 for wxID_ANY to let wx auto-assign an ID)
 %%% @param Label The button label as a binary string (Gleam String)
-%%% @returns `{ok, Button}' with the created button reference. The button is
-%%%          guaranteed to be valid and ready to use.
+%%% @return `{ok, Button}' with the created button reference. The button is
+%%%         guaranteed to be valid and ready to use.
 %%% @end
 create_button(Frame, ID, Label) ->
     % Convert Gleam's String (Binary) to Erlang's String (List) for the label
@@ -159,7 +159,7 @@ create_button(Frame, ID, Label) ->
 %%% otherwise attempts to close the window.</p>
 %%%
 %%% @param Frame The frame to connect the close event to (from `create_frame/2')
-%%% @returns `ok' - The event connection always succeeds for a valid frame
+%%% @return `ok' - The event connection always succeeds for a valid frame
 %%% @end
 connect_close_event(Frame) ->
     wxFrame:connect(Frame, close_window),
@@ -194,7 +194,7 @@ connect_close_event(Frame) ->
 %%% @param Handler A Gleam function that will be called with any non-close
 %%%                messages. The function receives the message as a dynamic
 %%%                value and should return Nil.
-%%% @returns `ok' when a close_window event is received
+%%% @return `ok' when a close_window event is received
 %%% @end
 await_close_message(Handler) ->
     receive
@@ -232,7 +232,7 @@ await_close_message(Handler) ->
 %%%   <li>Automatically handled by the `with_app' wrapper in Gleam</li>
 %%% </ul>
 %%%
-%%% @returns `ok' - Cleanup always succeeds
+%%% @return `ok' - Cleanup always succeeds
 %%% @end
 destroy() ->
     wx:destroy(),
