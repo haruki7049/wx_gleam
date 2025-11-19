@@ -19,21 +19,50 @@ import gleam/dynamic
 import gleam/dynamic/decode
 import gleam/string
 
-/// Represents a close window event.
+/// Represents the type of close event.
 ///
-/// This type captures events that occur when a user attempts to close a window,
-/// such as clicking the close button or pressing Alt+F4.
+/// Different close event types indicate different reasons why a window or
+/// application is being closed.
 ///
 /// ## Variants
 ///
-/// - `Close(message)` - A successfully decoded close event with the message content
+/// - `CloseWindow` - User initiated close (e.g., clicked close button, pressed Alt+F4)
+/// - `EndSession` - System is shutting down or logging out
+/// - `QueryEndSession` - System is querying if it's safe to end the session
+pub type CloseEventType {
+  /// User initiated close action.
+  ///
+  /// This event is sent when the user clicks the close button, presses Alt+F4,
+  /// or otherwise requests the window to close.
+  CloseWindow
+  /// System is ending the session.
+  ///
+  /// This event is sent when the system is shutting down or the user is logging out.
+  /// The application should save its state and close gracefully.
+  EndSession
+  /// System is querying about ending the session.
+  ///
+  /// This event is sent when the system wants to know if it's safe to end the session.
+  /// The application can indicate whether it can close without data loss.
+  QueryEndSession
+}
+
+/// Represents a close window event.
+///
+/// This type captures events that occur when a user attempts to close a window,
+/// such as clicking the close button or pressing Alt+F4, or when the system
+/// is shutting down.
+///
+/// ## Variants
+///
+/// - `Close(type)` - A successfully decoded close event with the event type
 /// - `Unknown(raw)` - A fallback for when decoding fails, containing the raw string
 ///   representation of the message for debugging purposes
 pub type CloseEvent {
   /// A successfully decoded close event.
   ///
-  /// The `message` field contains the decoded string content from the wx event.
-  Close(message: String)
+  /// The `type` field indicates what kind of close event occurred.
+  Close(event_type: CloseEventType)
   /// A fallback event used when decoding fails.
   ///
   /// The `raw` field contains a string representation of the dynamic value that
@@ -44,18 +73,18 @@ pub type CloseEvent {
 /// Decodes a dynamic message into a CloseEvent.
 ///
 /// This function attempts to decode an incoming dynamic Erlang message into a
-/// typed `CloseEvent`. It first tries to decode the message as a String. If
-/// successful, it returns `Ok(Close(message))`. If decoding fails, it returns
-/// an `Error` with a description of the failure.
+/// typed `CloseEvent`. It expects messages in the format `{close, Type}` where
+/// Type is an atom indicating the close event subtype (close_window, end_session,
+/// or query_end_session).
 ///
 /// ## Parameters
 ///
 /// - `msg` - The dynamic message received from the wx event system, typically
-///   from the Erlang message queue
+///   from the Erlang message queue. Should be a tuple `{close, type_atom}`.
 ///
 /// ## Returns
 ///
-/// - `Ok(Close(message))` - When the message is successfully decoded as a String
+/// - `Ok(Close(event_type))` - When the message is successfully decoded
 /// - `Error(error_description)` - When decoding fails, with a description of the
 ///   error including the inspected raw value
 ///
@@ -74,12 +103,32 @@ pub type CloseEvent {
 /// `await_close_event` function in the main wx_gleam module, which handles
 /// decoding automatically and provides a typed handler interface.
 pub fn decode_close_event(msg: dynamic.Dynamic) -> Result(CloseEvent, String) {
-  case decode.run(msg, decode.string) {
-    Ok(message) -> Ok(Close(message))
+  // Decoder for the close event type atom
+  let close_type_decoder = fn(type_atom: dynamic.Dynamic) -> Result(CloseEventType, List(dynamic.DecodeError)) {
+    decode.run(type_atom, decode.string)
+    |> Result.then(fn(type_str) {
+      case type_str {
+        "close_window" -> Ok(CloseWindow)
+        "end_session" -> Ok(EndSession)
+        "query_end_session" -> Ok(QueryEndSession)
+        _ -> Error([dynamic.DecodeError(
+          expected: "close_window, end_session, or query_end_session",
+          found: type_str,
+          path: ["close event type"]
+        )])
+      }
+    })
+  }
+  
+  // Decode the {close, Type} tuple
+  let tuple_decoder = decode.tuple2(decode.string, close_type_decoder)
+  
+  case decode.run(msg, tuple_decoder) {
+    Ok(#("close", event_type)) -> Ok(Close(event_type))
     Error(_decode_errors) -> {
       // When decoding fails, provide a helpful error message with the raw value
       let raw = string.inspect(msg)
-      Error("Failed to decode close event. Raw value: " <> raw)
+      Error("Failed to decode close event. Expected {close, Type} tuple. Raw value: " <> raw)
     }
   }
 }

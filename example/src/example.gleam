@@ -67,7 +67,7 @@ pub fn main() {
 ///
 /// ## Behavior
 ///
-/// - **Close event**: Prints the message to stdout
+/// - **Close event**: Prints the event type to stdout
 /// - **Unknown event**: Prints the raw value to stderr (this indicates a decoding failure)
 ///
 /// ## Note
@@ -76,7 +76,14 @@ pub fn main() {
 /// This example demonstrates event handling for educational purposes.
 fn event_handler(event: events.CloseEvent) -> Nil {
   case event {
-    events.Close(message) -> io.println("Close event received: " <> message)
+    events.Close(event_type) -> {
+      let type_str = case event_type {
+        events.CloseWindow -> "close_window"
+        events.EndSession -> "end_session"
+        events.QueryEndSession -> "query_end_session"
+      }
+      io.println("Close event received: " <> type_str)
+    }
     events.Unknown(raw) -> io.println_error("Unknown event: " <> raw)
   }
 }

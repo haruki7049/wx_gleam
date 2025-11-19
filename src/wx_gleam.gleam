@@ -386,16 +386,24 @@ pub fn create_button(frame: WxFrame, label: String) -> Result(WxButton, Nil) {
   |> result.map_error(fn(_) { Nil })
 }
 
-/// Connects a close event handler to a frame.
+/// Connects close event handlers to a frame.
 ///
-/// This sets up the frame to send close_window events when the user attempts
-/// to close the window (e.g., by clicking the close button in the title bar or
-/// using Alt+F4). After calling this function, you should use 
-/// `await_close_event()` to wait for and handle the close event.
+/// This sets up the frame to send close events when the user attempts to close
+/// the window or when the system initiates a shutdown. By default, this function
+/// connects all close event types: close_window, end_session, and query_end_session.
+/// After calling this function, you should use `await_close_event()` to wait for
+/// and handle the close events.
+///
+/// ## Close Event Types
+///
+/// - **close_window** - User clicked close button, pressed Alt+F4, or otherwise
+///   requested the window to close
+/// - **end_session** - System is shutting down or the user is logging out
+/// - **query_end_session** - System is querying if it's safe to end the session
 ///
 /// ## Parameters
 ///
-/// - `frame` - The WxFrame to connect the close event to. This should be a
+/// - `frame` - The WxFrame to connect the close events to. This should be a
 ///   frame created with `create_frame()`.
 ///
 /// ## Example
@@ -417,15 +425,22 @@ pub fn connect_close_event(frame: WxFrame) -> Nil {
 
 /// Waits for and handles typed close events from the wx application.
 ///
-/// This function blocks the current process until a close_window event is
-/// received from the wx system. It automatically decodes the event into a
-/// typed `CloseEvent` and passes it to your handler. This provides type-safe
-/// event handling compared to working with raw dynamic values.
+/// This function blocks the current process until a close event is received
+/// from the wx system. It automatically decodes the event into a typed
+/// `CloseEvent` and passes it to your handler. This provides type-safe event
+/// handling compared to working with raw dynamic values.
+///
+/// ## Close Event Types
+///
+/// The handler will receive close events with one of these types:
+/// - `CloseWindow` - User initiated close (clicked close button, pressed Alt+F4)
+/// - `EndSession` - System is shutting down or logging out
+/// - `QueryEndSession` - System is querying if it's safe to end the session
 ///
 /// ## Parameters
 ///
 /// - `handler` - A function that receives a typed `CloseEvent` value. The event
-///   will be either `Close(message)` for successfully decoded events, or
+///   will be either `Close(event_type)` for successfully decoded events, or
 ///   `Unknown(raw)` when decoding fails. This allows you to handle events in a
 ///   type-safe manner.
 ///
@@ -433,12 +448,15 @@ pub fn connect_close_event(frame: WxFrame) -> Nil {
 ///
 /// 1. Blocks the current process
 /// 2. Receives messages from the Erlang message queue
-/// 3. If a close_window event is received, the function returns
+/// 3. When a close event is received:
+///    - Decodes it into a `CloseEvent` with the appropriate type
+///    - Calls your handler with the decoded event
+///    - Returns after handling the close event
 /// 4. If any other message is received:
 ///    - Attempts to decode it into a `CloseEvent`
-///    - On success: calls handler with `Close(message)`
+///    - On success: calls handler with `Close(event_type)`
 ///    - On failure: logs error and calls handler with `Unknown(raw)`
-/// 5. The function continues waiting after handling non-close messages
+///    - Continues waiting for more messages
 ///
 /// ## Example
 ///
@@ -454,7 +472,13 @@ pub fn connect_close_event(frame: WxFrame) -> Nil {
 /// // Handle different event types
 /// await_close_event(fn(event) {
 ///   case event {
-///     events.Close(msg) -> io.println("Close event: " <> msg)
+///     events.Close(event_type) -> {
+///       case event_type {
+///         events.CloseWindow -> io.println("User closed window")
+///         events.EndSession -> io.println("System is shutting down")
+///         events.QueryEndSession -> io.println("System querying about shutdown")
+///       }
+///     }
 ///     events.Unknown(raw) -> io.println_error("Unknown event: " <> raw)
 ///   }
 /// })
