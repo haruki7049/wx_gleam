@@ -6,7 +6,9 @@ target = "erlang"
 description = "A Gleam library for creating native GUIs using Erlang's wxWidgets (wx) bindings"
 licences = ["MIT"]
 repository = { type = "github", user = "haruki7049", repo = "wx_gleam" }
-links = [{ title = "Repository", href = "https://github.com/haruki7049/wx_gleam" }]
+links = [
+  { title = "Repository", href = "https://github.com/haruki7049/wx_gleam" },
+]
 
 # For a full reference of all the available options, you can have a look at
 # https://gleam.run/writing-gleam/gleam-toml/.

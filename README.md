@@ -11,19 +11,19 @@ The core logic is implemented in Erlang (`src/wx_gleam/internals/wx_ffi.erl`) an
 
 ## Features
 
-✅ **Native GUI**: Uses wxWidgets for truly native look and feel on all platforms  
-✅ **Cross-Platform**: Works on Linux, macOS, and Windows  
-✅ **Type-Safe**: Leverages Gleam's type system for compile-time safety  
-✅ **Minimal Overhead**: Thin wrapper with minimal abstractions  
-✅ **Erlang Integration**: Seamlessly integrates with the BEAM ecosystem  
+✅ **Native GUI**: Uses wxWidgets for truly native look and feel on all platforms\
+✅ **Cross-Platform**: Works on Linux, macOS, and Windows\
+✅ **Type-Safe**: Leverages Gleam's type system for compile-time safety\
+✅ **Minimal Overhead**: Thin wrapper with minimal abstractions\
+✅ **Erlang Integration**: Seamlessly integrates with the BEAM ecosystem
 
 ## Current Limitations
 
-⚠️ **Work in Progress**: This library is still in early development  
-⚠️ **Limited Widgets**: Currently supports basic frames and buttons only  
-⚠️ **No Event Handlers**: Button click events are not yet implemented  
-⚠️ **Not on Hex**: Must be used as a path dependency for now  
-⚠️ **Basic Layout**: No layout managers yet (widgets use default positioning)  
+⚠️ **Work in Progress**: This library is still in early development\
+⚠️ **Limited Widgets**: Currently supports basic frames and buttons only\
+⚠️ **No Event Handlers**: Button click events are not yet implemented\
+⚠️ **Not on Hex**: Must be used as a path dependency for now\
+⚠️ **Basic Layout**: No layout managers yet (widgets use default positioning)
 
 Future development will expand widget support and add more wxWidgets functionality.
 
@@ -75,6 +75,7 @@ wx_gleam is designed as a thin Gleam wrapper around Erlang's `wx` module:
 ```
 
 This layered architecture ensures:
+
 - Type safety at the Gleam level
 - Proper conversion between Gleam and Erlang types
 - Direct access to wxWidgets functionality
@@ -181,6 +182,7 @@ nix develop
 ```
 
 This will provide you with:
+
 - Gleam 1.13.0
 - Erlang/OTP 28.1.1
 - All required build tools
@@ -200,8 +202,8 @@ The environment will be loaded automatically when you enter the project director
 If you prefer to install dependencies manually:
 
 1. Install [Gleam](https://gleam.run/getting-started/installing/) (version 1.13.0 or later)
-2. Install [Erlang/OTP](https://www.erlang.org/downloads) (version 28.1.1 or later)
-3. Ensure wxWidgets development files are installed on your system
+1. Install [Erlang/OTP](https://www.erlang.org/downloads) (version 28.1.1 or later)
+1. Ensure wxWidgets development files are installed on your system
 
 ### Common Commands
 
@@ -280,15 +282,17 @@ See [`.github/workflows/test.yml`](.github/workflows/test.yml) for the complete 
 If you get errors about wxWidgets not being found:
 
 - **Linux**: Install wxWidgets development packages:
+
   ```sh
   # Ubuntu/Debian
   sudo apt-get install libwxgtk3.0-gtk3-dev
-  
+
   # Fedora
   sudo dnf install wxGTK-devel
   ```
 
 - **macOS**: wxWidgets is included with Erlang installed via Homebrew:
+
   ```sh
   brew install erlang
   ```
@@ -298,9 +302,10 @@ If you get errors about wxWidgets not being found:
 ### Application Crashes on Startup
 
 If the wx application crashes on startup, ensure:
+
 1. You're running on a system with a GUI (X11, Wayland, macOS Aqua, or Windows)
-2. The `DISPLAY` environment variable is set correctly (Linux/Unix)
-3. Erlang's wx module is properly compiled with wxWidgets support
+1. The `DISPLAY` environment variable is set correctly (Linux/Unix)
+1. Erlang's wx module is properly compiled with wxWidgets support
 
 ### Display Issues in Headless Environments
 
@@ -323,7 +328,7 @@ Contributions are welcome! Here's how you can help:
 If you find a bug or have a feature request:
 
 1. Check if an issue already exists in the [issue tracker](https://github.com/haruki7049/wx_gleam/issues)
-2. If not, create a new issue with:
+1. If not, create a new issue with:
    - A clear description of the problem or feature
    - Steps to reproduce (for bugs)
    - Your environment details (OS, Gleam version, Erlang version)
@@ -331,21 +336,21 @@ If you find a bug or have a feature request:
 ### Submitting Changes
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes following the project's style:
+1. Create a feature branch (`git checkout -b feature/amazing-feature`)
+1. Make your changes following the project's style:
    - Add documentation comments for new functions
    - Follow existing code patterns
    - Keep changes minimal and focused
-4. Format your code:
+1. Format your code:
    ```sh
    gleam format
    ```
-5. Run tests to ensure nothing breaks:
+1. Run tests to ensure nothing breaks:
    ```sh
    gleam test
    ```
-6. Commit your changes with clear messages
-7. Push to your fork and create a pull request
+1. Commit your changes with clear messages
+1. Push to your fork and create a pull request
 
 ### Development Guidelines
 
