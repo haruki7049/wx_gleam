@@ -345,8 +345,9 @@ pub fn create_frame(app: WxApp, title: String) -> Result(WxFrame, Nil) {
 /// let assert Ok(frame) = create_frame(wx_app, "My Window")
 /// show_frame(frame)  // Frame is now visible on screen
 /// ```
-pub fn show_frame(frame: WxFrame) -> Nil {
+pub fn show_frame(frame: WxFrame) -> WxFrame {
   internals.show_frame(frame)
+  frame
 }
 
 /// Creates a button with the specified label inside a frame.
@@ -411,8 +412,9 @@ pub fn create_button(frame: WxFrame, label: String) -> Result(WxButton, Nil) {
 ///
 /// Without calling this function, close events will not be sent to your
 /// application, and `await_close_event()` will block indefinitely.
-pub fn connect_close_event(frame: WxFrame) -> Nil {
+pub fn connect_close_event(frame: WxFrame) -> WxFrame {
   internals.connect_close_event(frame)
+  frame
 }
 
 /// Waits for and handles typed close events from the wx application.
