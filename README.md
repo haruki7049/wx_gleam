@@ -19,11 +19,11 @@ The core logic is implemented in Erlang (`src/wx_gleam/internals/wx_ffi.erl`) an
 
 ## Current Limitations
 
-- **Work in Progress**: This library is still in early development
-- **Limited Widgets**: Currently supports basic frames and buttons only
-- **No Event Handlers**: Button click events are not yet implemented
-- **Not on Hex**: Must be used as a path dependency for now
-- **Basic Layout**: No layout managers yet (widgets use default positioning)
+- ⚠️ **Work in Progress**: This library is still in early development
+- ⚠️ **Limited Widgets**: Currently supports basic frames and buttons only
+- ⚠️ **No Event Handlers**: Button click events are not yet implemented
+- ⚠️ **Not on Hex**: Must be used as a path dependency for now
+- ⚠️ **Basic Layout**: No layout managers yet (widgets use default positioning)
 
 Future development will expand widget support and add more wxWidgets functionality.
 
