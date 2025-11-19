@@ -103,34 +103,35 @@ pub type CloseEvent {
 /// `await_close_event` function in the main wx_gleam module, which handles
 /// decoding automatically and provides a typed handler interface.
 pub fn decode_close_event(msg: dynamic.Dynamic) -> Result(CloseEvent, String) {
-  // Decoder for the close event type atom
-  let close_type_decoder = fn(type_atom: dynamic.Dynamic) -> Result(
-    CloseEventType,
-    List(dynamic.DecodeError),
-  ) {
-    decode.run(type_atom, decode.string)
-    |> Result.then(fn(type_str) {
-      case type_str {
-        "close_window" -> Ok(CloseWindow)
-        "end_session" -> Ok(EndSession)
-        "query_end_session" -> Ok(QueryEndSession)
-        _ ->
-          Error([
-            dynamic.DecodeError(
-              expected: "close_window, end_session, or query_end_session",
-              found: type_str,
-              path: ["close event type"],
-            ),
-          ])
-      }
-    })
-  }
-
-  // Decode the {close, Type} tuple
-  let tuple_decoder = decode.tuple2(decode.string, close_type_decoder)
+  // Decoder for 2-element tuples where both elements are strings (atoms decode to strings)
+  let tuple_decoder = decode.tuple2(decode.string, decode.string)
 
   case decode.run(msg, tuple_decoder) {
-    Ok(#("close", event_type)) -> Ok(Close(event_type))
+    Ok(#("close", type_str)) -> {
+      // Decode the type string to CloseEventType
+      case type_str {
+        "close_window" -> Ok(Close(CloseWindow))
+        "end_session" -> Ok(Close(EndSession))
+        "query_end_session" -> Ok(Close(QueryEndSession))
+        _ -> {
+          let raw = string.inspect(msg)
+          Error(
+            "Failed to decode close event. Unknown type: "
+            <> type_str
+            <> ". Raw value: "
+            <> raw,
+          )
+        }
+      }
+    }
+    Ok(_) -> {
+      // Handle tuples that don't match #("close", _)
+      let raw = string.inspect(msg)
+      Error(
+        "Failed to decode close event. Expected {close, Type} tuple. Raw value: "
+        <> raw,
+      )
+    }
     Error(_decode_errors) -> {
       // When decoding fails, provide a helpful error message with the raw value
       let raw = string.inspect(msg)
