@@ -391,7 +391,7 @@ pub fn create_button(frame: WxFrame, label: String) -> Result(WxButton, Nil) {
 /// This sets up the frame to send close_window events when the user attempts
 /// to close the window (e.g., by clicking the close button in the title bar or
 /// using Alt+F4). After calling this function, you should use 
-/// `await_close_message()` to wait for and handle the close event.
+/// `await_close_event()` to wait for and handle the close event.
 ///
 /// ## Parameters
 ///
@@ -410,7 +410,7 @@ pub fn create_button(frame: WxFrame, label: String) -> Result(WxButton, Nil) {
 /// ## Note
 ///
 /// Without calling this function, close events will not be sent to your
-/// application, and `await_close_message()` will block indefinitely.
+/// application, and `await_close_event()` will block indefinitely.
 pub fn connect_close_event(frame: WxFrame) -> Nil {
   internals.connect_close_event(frame)
 }
