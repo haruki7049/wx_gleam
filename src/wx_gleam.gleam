@@ -28,7 +28,7 @@
 ////   
 ////   wx_gleam.show_frame(frame)
 ////   wx_gleam.connect_close_event(frame)
-////   wx_gleam.await_close_message(fn(_) { Nil })
+////   wx_gleam.await_close_event(fn(_) { Nil })
 //// }
 //// ```
 ////
@@ -46,7 +46,7 @@
 ////   
 ////   wx_gleam.show_frame(wx_frame)
 ////   wx_gleam.connect_close_event(wx_frame)
-////   wx_gleam.await_close_message(fn(_) { Nil })
+////   wx_gleam.await_close_event(fn(_) { Nil })
 ////   wx_gleam.destroy()
 //// }
 //// ```
@@ -59,7 +59,9 @@
 //// simplicity.
 
 import gleam/dynamic
+import gleam/io
 import gleam/result
+import wx_gleam/events
 import wx_gleam/internals
 
 // --- Type definitions ---
@@ -178,7 +180,7 @@ pub fn init_wx() -> Result(WxApp, dynamic.Dynamic) {
 /// let assert Ok(frame) = create_frame(wx_app, "My Window")
 /// show_frame(frame)
 /// connect_close_event(frame)
-/// await_close_message(fn(_) { Nil })
+/// await_close_event(fn(_) { Nil })
 /// ```
 ///
 /// ## Note
@@ -226,7 +228,7 @@ pub fn with_app(mainloop: fn(WxApp) -> Nil) -> Nil {
 /// let assert Ok(_button) = create_button(frame, "Click Me!")
 /// show_frame(frame)
 /// connect_close_event(frame)
-/// await_close_message(fn(_) { Nil })
+/// await_close_event(fn(_) { Nil })
 /// ```
 ///
 /// ## Note
@@ -276,7 +278,7 @@ pub fn with_frame(
 /// // Button is now created and available
 /// show_frame(frame)
 /// connect_close_event(frame)
-/// await_close_message(fn(_) { Nil })
+/// await_close_event(fn(_) { Nil })
 /// ```
 ///
 /// ## Note
@@ -402,7 +404,7 @@ pub fn create_button(frame: WxFrame, label: String) -> Result(WxButton, Nil) {
 /// let assert Ok(frame) = create_frame(wx_app, "My Window")
 /// show_frame(frame)
 /// connect_close_event(frame)
-/// await_close_message(fn(_) { Nil })  // Wait for user to close window
+/// await_close_event(fn(_) { Nil })  // Wait for user to close window
 /// ```
 ///
 /// ## Note
@@ -413,40 +415,48 @@ pub fn connect_close_event(frame: WxFrame) -> Nil {
   internals.connect_close_event(frame)
 }
 
-/// Waits for and handles close messages from the wx application.
+/// Waits for and handles typed close events from the wx application.
 ///
 /// This function blocks the current process until a close_window event is
-/// received from the wx system. Any other messages received while waiting
-/// will be passed to the provided handler function. This is useful for keeping
-/// the application alive until the user closes the window.
+/// received from the wx system. It automatically decodes the event into a
+/// typed `CloseEvent` and passes it to your handler. This provides type-safe
+/// event handling compared to working with raw dynamic values.
 ///
 /// ## Parameters
 ///
-/// - `handler` - A function that will be called with any non-close messages
-///   received while waiting. The message is passed as a `dynamic.Dynamic` value
-///   which can be decoded if needed. For simple applications, a no-op handler
-///   `fn(_) { Nil }` is often sufficient.
+/// - `handler` - A function that receives a typed `CloseEvent` value. The event
+///   will be either `Close(message)` for successfully decoded events, or
+///   `Unknown(raw)` when decoding fails. This allows you to handle events in a
+///   type-safe manner.
 ///
 /// ## Behavior
 ///
 /// 1. Blocks the current process
 /// 2. Receives messages from the Erlang message queue
 /// 3. If a close_window event is received, the function returns
-/// 4. If any other message is received, it's passed to the handler and
-///    the function continues waiting
+/// 4. If any other message is received:
+///    - Attempts to decode it into a `CloseEvent`
+///    - On success: calls handler with `Close(message)`
+///    - On failure: logs error and calls handler with `Unknown(raw)`
+/// 5. The function continues waiting after handling non-close messages
 ///
 /// ## Example
 ///
 /// ```gleam
-/// // Simple case: ignore all non-close messages
-/// await_close_message(fn(_) { Nil })
+/// import wx_gleam/events
+/// import gleam/io
+///
+/// // Simple case: ignore all events
+/// await_close_event(fn(_event) { Nil })
 /// ```
 ///
 /// ```gleam
-/// // Advanced case: handle messages
-/// import gleam/io
-/// await_close_message(fn(msg) {
-///   io.debug(msg)
+/// // Handle different event types
+/// await_close_event(fn(event) {
+///   case event {
+///     events.Close(msg) -> io.println("Close event: " <> msg)
+///     events.Unknown(raw) -> io.println_error("Unknown event: " <> raw)
+///   }
 /// })
 /// ```
 ///
@@ -454,8 +464,21 @@ pub fn connect_close_event(frame: WxFrame) -> Nil {
 ///
 /// This function will block indefinitely if `connect_close_event()` hasn't been
 /// called on any frames, as no close messages will be sent.
-pub fn await_close_message(handler: fn(dynamic.Dynamic) -> Nil) -> Nil {
-  internals.await_close_message(handler)
+pub fn await_close_event(handler: fn(events.CloseEvent) -> Nil) -> Nil {
+  // Create an adapter that converts dynamic messages to typed CloseEvent
+  let adapter = fn(msg: dynamic.Dynamic) -> Nil {
+    case events.decode_close_event(msg) {
+      Ok(event) -> handler(event)
+      Error(err_str) -> {
+        // Log the error for debugging
+        io.println_error(err_str)
+        // Call handler with Unknown so user can observe the failure
+        handler(events.Unknown(err_str))
+      }
+    }
+  }
+
+  internals.await_close_message(adapter)
 }
 
 /// Cleans up and destroys the wxWidgets application.
