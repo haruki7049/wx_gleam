@@ -24,11 +24,9 @@
 //// The application will display a window with a "Click Me!" button. Close the
 //// window to exit the application.
 
-import gleam/dynamic
-import gleam/dynamic/decode
 import gleam/io
-import gleam/string
 import wx_gleam
+import wx_gleam/events
 
 /// Entry point for the example application.
 ///
@@ -54,35 +52,31 @@ pub fn main() {
   wx_gleam.show_frame(frame)
 
   wx_gleam.connect_close_event(frame)
-  wx_gleam.await_close_message(message_handler)
+  wx_gleam.await_close_event(event_handler)
 }
 
-/// Handles close messages from the wx application.
+/// Handles typed close events from the wx application.
 ///
-/// This function is called when the window receives a close event. It attempts
-/// to decode the message as a string and prints it to the console. If decoding
-/// fails, it prints the error to stderr.
+/// This function is called when the window receives a close event. It receives
+/// a typed `CloseEvent` which can be either a successfully decoded close message
+/// or an unknown event if decoding failed.
 ///
 /// ## Parameters
 ///
-/// - `message` - The dynamic message received from the close event. This is
-///   typically a wx event record from Erlang.
+/// - `event` - The typed CloseEvent received from the close event handler.
 ///
 /// ## Behavior
 ///
-/// - **Success**: If the message can be decoded as a string, prints it to stdout
-/// - **Failure**: If decoding fails, prints the decode error to stderr
+/// - **Close event**: Prints the message to stdout
+/// - **Unknown event**: Prints the raw value to stderr (this indicates a decoding failure)
 ///
 /// ## Note
 ///
 /// For most applications, a simpler handler like `fn(_) { Nil }` is sufficient.
-/// This example demonstrates message inspection for educational purposes.
-fn message_handler(message: dynamic.Dynamic) -> Nil {
-  case decode.run(message, decode.string) {
-    Ok(message_str) -> io.println(message_str)
-    Error(err) ->
-      err
-      |> string.inspect()
-      |> io.println_error()
+/// This example demonstrates event handling for educational purposes.
+fn event_handler(event: events.CloseEvent) -> Nil {
+  case event {
+    events.Close(message) -> io.println("Close event received: " <> message)
+    events.Unknown(raw) -> io.println_error("Unknown event: " <> raw)
   }
 }
