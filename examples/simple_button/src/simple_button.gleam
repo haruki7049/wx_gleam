@@ -46,8 +46,8 @@ import wx_gleam/events
 /// 7. Automatic cleanup by `with_app()`
 pub fn main() {
   use wx_app: wx_gleam.WxApp <- wx_gleam.with_app()
-  use frame <- wx_gleam.with_frame(wx_app, "Gleam WxApp")
-  use _button <- wx_gleam.with_button(frame, "Click Me!")
+  use frame <- wx_gleam.with_frame(wx_app, "wx_gleam example: simple_button")
+  use _button <- wx_gleam.with_button(frame, "This is a example button...!!")
 
   frame
   |> wx_gleam.show_frame()
