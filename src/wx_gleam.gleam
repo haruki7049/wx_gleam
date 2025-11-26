@@ -406,14 +406,20 @@ pub fn create_frame(app: WxApp, title: String) -> Result(WxFrame, Nil) {
 /// - `frame` - The WxFrame to show. The frame should have been created using
 ///   `create_frame()` and may contain child widgets like buttons or text fields.
 ///
+/// ## Returns
+///
+/// Returns the same `WxFrame` that was passed in. This allows for method chaining
+/// with other frame operations.
+///
 /// ## Example
 ///
 /// ```gleam
 /// let assert Ok(frame) = create_frame(wx_app, "My Window")
 /// show_frame(frame)  // Frame is now visible on screen
 /// ```
-pub fn show_frame(frame: WxFrame) -> Nil {
+pub fn show_frame(frame: WxFrame) -> WxFrame {
   internals.show_frame(frame)
+  frame
 }
 
 /// Creates a button with the specified label inside a frame.
@@ -505,6 +511,11 @@ pub fn create_text_ctrl(
 /// - `frame` - The WxFrame to connect the close event to. This should be a
 ///   frame created with `create_frame()`.
 ///
+/// ## Returns
+///
+/// Returns the same `WxFrame` that was passed in. This allows for method chaining
+/// with other frame operations.
+///
 /// ## Example
 ///
 /// ```gleam
@@ -518,8 +529,9 @@ pub fn create_text_ctrl(
 ///
 /// Without calling this function, close events will not be sent to your
 /// application, and `await_close_event()` will block indefinitely.
-pub fn connect_close_event(frame: WxFrame) -> Nil {
+pub fn connect_close_event(frame: WxFrame) -> WxFrame {
   internals.connect_close_event(frame)
+  frame
 }
 
 /// Waits for and handles typed close events from the wx application.

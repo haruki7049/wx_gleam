@@ -120,7 +120,7 @@ pub fn main() {
 
   // Connect the close event and wait for the close message
   wx_gleam.connect_close_event(frame)
-  wx_gleam.await_close_message(fn(_) { Nil })
+  wx_gleam.await_close_event(fn(_) { Nil })
 }
 ```
 
@@ -139,7 +139,7 @@ pub fn main() {
 
   wx_gleam.show_frame(frame)
   wx_gleam.connect_close_event(frame)
-  wx_gleam.await_close_message(fn(_) { Nil })
+  wx_gleam.await_close_event(fn(_) { Nil })
 }
 ```
 
@@ -157,7 +157,7 @@ pub fn main() {
 
   wx_gleam.show_frame(wx_frame)
   wx_gleam.connect_close_event(wx_frame)
-  wx_gleam.await_close_message(fn(_) { Nil })
+  wx_gleam.await_close_event(fn(_) { Nil })
 }
 ```
 
@@ -184,7 +184,7 @@ pub fn main() {
 
   // Connect the close event and wait for the close message
   wx_gleam.connect_close_event(wx_frame)
-  wx_gleam.await_close_message(fn(_) { Nil })
+  wx_gleam.await_close_event(fn(_) { Nil })
 
   // Clean up and destroy the wx application
   wx_gleam.destroy()
@@ -205,7 +205,7 @@ The wx_gleam library provides a simple, high-level API for common GUI operations
 - **`create_button()`** - Create a button widget inside a frame
 - **`create_text_ctrl()`** - Create a text control widget inside a frame
 - **`connect_close_event()`** - Enable close event handling for a window
-- **`await_close_message()`** - Wait for the user to close a window
+- **`await_close_event()`** - Wait for the user to close a window
 - **`destroy()`** - Clean up and shut down the wx application
 
 For more advanced functionality, you can use the lower-level FFI functions in the `wx_gleam/internals` module.
