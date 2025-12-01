@@ -80,6 +80,27 @@ import wx_gleam/internals
 pub type WxApp =
   internals.WxApp
 
+/// Represents a wxWidgets window.
+///
+/// WxWindow is the base class for all window types in wxWidgets. It provides
+/// common functionality shared by all windows, including frames, panels, and
+/// controls. This type serves as a parent type for WxFrame and can be used
+/// when a more generic window reference is needed.
+///
+/// ## Type Hierarchy
+///
+/// In wxWidgets, the type hierarchy is:
+/// - wxWindow (base) -> wxTopLevelWindow -> wxFrame
+/// - wxWindow (base) -> wxControl -> wxButton, wxTextCtrl, etc.
+///
+/// ## Usage
+///
+/// WxWindow is primarily used when you need to pass a frame or other window
+/// to a function that accepts any window type. Use `to_window` to convert
+/// a WxFrame to WxWindow.
+pub type WxWindow =
+  internals.WxWindow
+
 /// Represents a wxWidgets frame (window).
 ///
 /// A frame is a top-level window that can contain other GUI components like
@@ -420,6 +441,39 @@ pub fn create_frame(app: WxApp, title: String) -> Result(WxFrame, Nil) {
 pub fn show_frame(frame: WxFrame) -> WxFrame {
   internals.show_frame(frame)
   frame
+}
+
+/// Converts a WxFrame to a WxWindow.
+///
+/// This function performs a safe upcast from WxFrame to WxWindow. In wxWidgets,
+/// wxFrame inherits from wxWindow, so every frame is also a window. This 
+/// conversion is useful when you need to pass a frame to a function that 
+/// accepts any window type.
+///
+/// ## Parameters
+///
+/// - `frame` - The WxFrame to convert to a WxWindow
+///
+/// ## Returns
+///
+/// Returns the frame as a WxWindow reference. The underlying widget remains
+/// the same; only the type annotation changes.
+///
+/// ## Example
+///
+/// ```gleam
+/// let assert Ok(frame) = create_frame(wx_app, "My Window")
+/// let window: WxWindow = to_window(frame)
+/// // Now you can use `window` where WxWindow is expected
+/// ```
+///
+/// ## Type Hierarchy
+///
+/// In wxWidgets: wxWindow -> wxTopLevelWindow -> wxFrame
+///
+/// This means the conversion from WxFrame to WxWindow is always safe.
+pub fn to_window(frame: WxFrame) -> WxWindow {
+  internals.to_window(frame)
 }
 
 /// Creates a button with the specified label inside a frame.

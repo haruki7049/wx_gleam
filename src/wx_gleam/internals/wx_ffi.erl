@@ -31,6 +31,7 @@
          create_text_ctrl/3,
          connect_close_event/1,
          await_close_message/1,
+         to_window/1,
          destroy/0]).
 
 % Include the wxWidgets header file which defines macros and records
@@ -241,6 +242,23 @@ await_close_message(Handler) ->
             % Continue waiting recursively
             await_close_message(Handler)
     end.
+
+
+%%% @doc Convert a wxFrame to a wxWindow.
+%%%
+%%% This function performs an upcast from wxFrame to wxWindow. In wxWidgets,
+%%% wxFrame inherits from wxWindow, so this is a safe type conversion that
+%%% simply returns the same reference with a different type annotation.
+%%%
+%%% <h3>Type Hierarchy</h3>
+%%% <p>In wxWidgets: wxWindow -> wxTopLevelWindow -> wxFrame</p>
+%%% <p>This means every wxFrame is also a wxWindow, making the conversion safe.</p>
+%%%
+%%% @param Frame The wxFrame reference to convert
+%%% @returns The same reference as a wxWindow
+%%% @end
+to_window(Frame) ->
+    Frame.
 
 
 %%% @doc Clean up and destroy the wxWidgets application.

@@ -33,6 +33,14 @@ import gleam/dynamic
 /// the `init_wx()` FFI function.
 pub type WxApp
 
+/// Opaque type representing a wxWidgets window.
+///
+/// This type is implemented in Erlang and represents the underlying wx
+/// window object. It is a parent type of WxFrame and other window types.
+/// WxWindow is a base class in wxWidgets that provides common window
+/// functionality.
+pub type WxWindow
+
 /// Opaque type representing a wxWidgets frame (window).
 ///
 /// This type is implemented in Erlang and represents the underlying wx
@@ -155,6 +163,21 @@ pub fn create_text_ctrl(
   id: Int,
   value: String,
 ) -> Result(WxTextCtrl, dynamic.Dynamic)
+
+/// Converts a WxFrame to a WxWindow via FFI.
+///
+/// This function converts a WxFrame reference to a WxWindow reference.
+/// In wxWidgets, wxFrame inherits from wxWindow, so this is a safe upcast.
+///
+/// ## Parameters
+///
+/// - `frame` - The WxFrame to convert
+///
+/// ## Returns
+///
+/// The WxFrame as a WxWindow reference
+@external(erlang, "wx_ffi", "to_window")
+pub fn to_window(frame: WxFrame) -> WxWindow
 
 /// Cleans up and destroys the wxWidgets application via FFI.
 ///
