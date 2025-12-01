@@ -380,7 +380,7 @@ pub fn with_text_ctrl(
 /// A convenience function that creates a checkbox, runs a mainloop with it,
 /// and handles the setup automatically.
 ///
-/// This function provides a convenient way to work with checkboxes using 
+/// This function provides a convenient way to work with checkboxes using
 /// Gleam's `use` syntax. It creates a checkbox with the specified label and
 /// passes it to your mainloop function. This is useful when you want to
 /// encapsulate checkbox creation and usage in a clean, resource-safe pattern.

@@ -32,7 +32,7 @@ import wx_gleam/events
 ///
 /// Creates a simple wxWidgets window with a checkbox and waits
 /// for the user to close the window. This function demonstrates the recommended
-/// pattern using `with_app()`, `with_frame()`, and `with_checkbox()` which 
+/// pattern using `with_app()`, `with_frame()`, and `with_checkbox()` which
 /// automatically handle wx initialization, frame creation, and checkbox creation.
 ///
 /// ## Application Flow
