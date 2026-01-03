@@ -1,6 +1,6 @@
 //// Test suite for the example application.
 ////
-//// This module contains tests for the example wx_gleam application using gleeunit.
+//// This module contains tests for the example wxgleam application using gleeunit.
 
 import gleeunit
 

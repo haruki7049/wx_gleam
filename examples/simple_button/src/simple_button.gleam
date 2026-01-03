@@ -1,7 +1,7 @@
-//// Example application demonstrating the wx_gleam library.
+//// Example application demonstrating the wxgleam library.
 ////
 //// This example creates a simple wxWidgets window with a button and demonstrates
-//// the basic usage of the wx_gleam API. It showcases the recommended pattern
+//// the basic usage of the wxgleam API. It showcases the recommended pattern
 //// using the `with_app` and `with_frame` convenience functions for automatic 
 //// resource management.
 ////
@@ -25,8 +25,8 @@
 //// window to exit the application.
 
 import gleam/io
-import wx_gleam
-import wx_gleam/events
+import wxgleam
+import wxgleam/events
 
 /// Entry point for the example application.
 ///
@@ -45,15 +45,15 @@ import wx_gleam/events
 /// 6. Wait for user to close the window (blocking call)
 /// 7. Automatic cleanup by `with_app()`
 pub fn main() {
-  use wx_app: wx_gleam.WxApp <- wx_gleam.with_app()
-  use frame <- wx_gleam.with_frame(wx_app, "wx_gleam example: simple_button")
-  use _button <- wx_gleam.with_button(frame, "This is a example button...!!")
+  use wx_app: wxgleam.WxApp <- wxgleam.with_app()
+  use frame <- wxgleam.with_frame(wx_app, "wxgleam example: simple_button")
+  use _button <- wxgleam.with_button(frame, "This is a example button...!!")
 
   frame
-  |> wx_gleam.show_frame()
-  |> wx_gleam.connect_close_event()
+  |> wxgleam.show_frame()
+  |> wxgleam.connect_close_event()
 
-  wx_gleam.await_close_event(event_handler)
+  wxgleam.await_close_event(event_handler)
 }
 
 /// Handles typed close events from the wx application.
