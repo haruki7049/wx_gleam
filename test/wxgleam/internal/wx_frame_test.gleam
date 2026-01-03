@@ -7,5 +7,11 @@ pub fn default_test() {
   let _new_object: wx.WxObject = wx.new([])
   let default_frame: wx.WxObject = wx_frame.default()
 
+  default_frame |> wx.is_null() |> should.be_false()
+  default_frame |> wx.equal(wx.null()) |> should.be_false()
+  default_frame
+  |> wx.get_object_type()
+  |> should.equal(atom.create("wxFrame"))
+
   wx.destroy()
 }
