@@ -5,7 +5,7 @@
 import gleam/option.{None}
 import gleeunit
 import gleeunit/should
-import wx_gleam
+import wxgleam
 
 /// Entry point for running the test suite.
 ///
@@ -15,14 +15,14 @@ pub fn main() {
 }
 
 pub fn start_test() {
-  let assert Ok(_) = wx_gleam.start()
+  let assert Ok(_) = wxgleam.start()
 }
 
 pub fn handle_app_test() {
-  let assert Ok(_) = wx_gleam.start()
-  use _frame: wx_gleam.WxFrame <- wx_gleam.handle_frame(None, 0, "HOGE", [])
+  let assert Ok(_) = wxgleam.start()
+  use _frame: wxgleam.WxFrame <- wxgleam.handle_frame(None, 0, "HOGE", [])
 
-  //let _expected: wx_gleam.WxFrame = wx_gleam.WxPreviewFrame
+  //let _expected: wxgleam.WxFrame = wxgleam.WxPreviewFrame
 
   Nil
 
