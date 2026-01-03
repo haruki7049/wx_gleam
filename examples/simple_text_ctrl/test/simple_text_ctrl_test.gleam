@@ -1,6 +1,6 @@
 //// Test suite for the simple_text_ctrl example application.
 ////
-//// This module contains tests for the simple_text_ctrl wx_gleam example using gleeunit.
+//// This module contains tests for the simple_text_ctrl wxgleam example using gleeunit.
 
 import gleeunit
 

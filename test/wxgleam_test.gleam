@@ -1,6 +1,6 @@
-//// Test suite for the wx_gleam library.
+//// Test suite for the wxgleam library.
 ////
-//// This module contains the test runner for the wx_gleam project using gleeunit.
+//// This module contains the test runner for the wxgleam project using gleeunit.
 
 import gleeunit
 

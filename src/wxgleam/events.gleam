@@ -1,4 +1,4 @@
-//// Event types and decoders for wx_gleam.
+//// Event types and decoders for wxgleam.
 ////
 //// This module provides type-safe event handling for wxWidgets events by
 //// defining event types and decoders that convert dynamic Erlang messages
@@ -12,7 +12,7 @@
 //// ## Usage
 ////
 //// The event types and decoders in this module are primarily used internally
-//// by the main wx_gleam module to provide type-safe event handlers to users.
+//// by the main wxgleam module to provide type-safe event handlers to users.
 //// However, you can also use them directly if you need custom event handling.
 
 import gleam/dynamic
@@ -71,7 +71,7 @@ pub type CloseEvent {
 /// ## Note
 ///
 /// Most users will not call this function directly. Instead, use the
-/// `await_close_event` function in the main wx_gleam module, which handles
+/// `await_close_event` function in the main wxgleam module, which handles
 /// decoding automatically and provides a typed handler interface.
 pub fn decode_close_event(msg: dynamic.Dynamic) -> Result(CloseEvent, String) {
   case decode.run(msg, decode.string) {

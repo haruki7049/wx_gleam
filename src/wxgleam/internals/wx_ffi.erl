@@ -18,7 +18,7 @@
 %%%
 %%% <h2>Usage</h2>
 %%% <p>This module is not meant to be called directly from Gleam. Instead, use
-%%% the public API in the `wx_gleam' module, which wraps these functions with
+%%% the public API in the `wxgleam' module, which wraps these functions with
 %%% more user-friendly types.</p>
 %%%
 %%% @end

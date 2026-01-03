@@ -1,6 +1,6 @@
 # simple_text_ctrl
 
-A simple example demonstrating the WxTextCtrl widget in the wx_gleam library.
+A simple example demonstrating the WxTextCtrl widget in the wxgleam library.
 
 ## What This Example Shows
 

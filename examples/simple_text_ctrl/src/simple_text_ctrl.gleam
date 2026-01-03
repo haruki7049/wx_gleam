@@ -1,7 +1,7 @@
-//// Example application demonstrating the WxTextCtrl widget in wx_gleam library.
+//// Example application demonstrating the WxTextCtrl widget in wxgleam library.
 ////
 //// This example creates a simple wxWidgets window with a text control and demonstrates
-//// the basic usage of the wx_gleam API. It showcases the recommended pattern
+//// the basic usage of the wxgleam API. It showcases the recommended pattern
 //// using the `with_app`, `with_frame`, and `with_text_ctrl` convenience functions
 //// for automatic resource management.
 ////
@@ -25,8 +25,8 @@
 //// window to exit the application.
 
 import gleam/io
-import wx_gleam
-import wx_gleam/events
+import wxgleam
+import wxgleam/events
 
 /// Entry point for the example application.
 ///
@@ -38,7 +38,7 @@ import wx_gleam/events
 /// ## Application Flow
 ///
 /// 1. Initialize wx application using `with_app()`
-/// 2. Create a 400x300 pixel frame titled "wx_gleam example: simple_text_ctrl"
+/// 2. Create a 400x300 pixel frame titled "wxgleam example: simple_text_ctrl"
 ///    using `with_frame()`
 /// 3. Add a text control with initial text using `with_text_ctrl()`
 /// 4. Make the frame visible on screen
@@ -46,15 +46,15 @@ import wx_gleam/events
 /// 6. Wait for user to close the window (blocking call)
 /// 7. Automatic cleanup by `with_app()`
 pub fn main() {
-  use wx_app: wx_gleam.WxApp <- wx_gleam.with_app()
-  use frame <- wx_gleam.with_frame(wx_app, "wx_gleam example: simple_text_ctrl")
-  use _text_ctrl <- wx_gleam.with_text_ctrl(frame, "Enter your text here...")
+  use wx_app: wxgleam.WxApp <- wxgleam.with_app()
+  use frame <- wxgleam.with_frame(wx_app, "wxgleam example: simple_text_ctrl")
+  use _text_ctrl <- wxgleam.with_text_ctrl(frame, "Enter your text here...")
 
   frame
-  |> wx_gleam.show_frame()
-  |> wx_gleam.connect_close_event()
+  |> wxgleam.show_frame()
+  |> wxgleam.connect_close_event()
 
-  wx_gleam.await_close_event(event_handler)
+  wxgleam.await_close_event(event_handler)
 }
 
 /// Handles typed close events from the wx application.
