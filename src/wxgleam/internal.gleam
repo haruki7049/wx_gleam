@@ -18,3 +18,9 @@ pub fn null() -> WxObject
 
 @external(erlang, "wx", "is_null")
 pub fn is_null(object: WxObject) -> Bool
+
+@external(erlang, "wx", "equal")
+pub fn equal(left: WxObject, right: WxObject) -> Bool
+
+@external(erlang, "wx", "getObjectType")
+pub fn get_object_type(object: WxObject) -> atom.Atom
