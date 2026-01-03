@@ -1,3 +1,4 @@
+import gleam/erlang/process
 import gleam/erlang/atom
 import gleeunit/should
 import wxgleam/internal/wx
@@ -27,6 +28,8 @@ pub fn new_test() {
   |> should.equal(atom.create("wxFrame"))
 
   let _return: Bool = wx_frame.show(new_frame, [])
+
+  process.sleep(3000)
 
   wx.destroy()
 }
