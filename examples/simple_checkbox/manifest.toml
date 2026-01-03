@@ -12,11 +12,11 @@ packages = [
   { name = "simplifile", version = "2.3.1", build_tools = ["gleam"], requirements = ["filepath", "gleam_stdlib"], otp_app = "simplifile", source = "hex", outer_checksum = "957E0E5B75927659F1D2A1B7B75D7B9BA96FAA8D0C53EA71C4AD9CD0C6B848F6" },
   { name = "snag", version = "1.2.0", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "snag", source = "hex", outer_checksum = "274F41D6C3ECF99F7686FDCE54183333E41D2C1CA5A3A673F9A8B2C7A4401077" },
   { name = "tom", version = "2.0.0", build_tools = ["gleam"], requirements = ["gleam_stdlib", "gleam_time"], otp_app = "tom", source = "hex", outer_checksum = "74D0C5A3761F7A7D06994755D4D5AD854122EF8E9F9F76A3E7547606D8C77091" },
-  { name = "wx_gleam", version = "0.1.0", build_tools = ["gleam"], requirements = ["gleam_erlang", "gleam_stdlib"], source = "local", path = "../.." },
+  { name = "wxgleam", version = "0.1.0", build_tools = ["gleam"], requirements = ["gleam_erlang", "gleam_stdlib"], source = "local", path = "../.." },
 ]
 
 [requirements]
 gleam_stdlib = { version = ">= 0.44.0 and < 2.0.0" }
 gleescript = { version = ">= 1.5.2 and < 2.0.0" }
 gleeunit = { version = ">= 1.0.0 and < 2.0.0" }
-wx_gleam = { path = "../.." }
+wxgleam = { path = "../.." }

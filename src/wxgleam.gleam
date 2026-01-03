@@ -2,8 +2,8 @@
 ////
 //// This module provides a Gleam-friendly API by wrapping the underlying Erlang
 //// functions via the Foreign Function Interface (FFI). The core logic is
-//// implemented in Erlang (`src/wx_gleam/internals/wx_ffi.erl`) and exposed to 
-//// Gleam through FFI definitions (`src/wx_gleam/internals.gleam`).
+//// implemented in Erlang (`src/wxgleam/internals/wx_ffi.erl`) and exposed to 
+//// Gleam through FFI definitions (`src/wxgleam/internals.gleam`).
 ////
 //// ## Project Goals
 ////
@@ -14,21 +14,21 @@
 ////
 //// ## Basic Usage
 ////
-//// The simplest way to use wx_gleam is with the `with_app` function, which
+//// The simplest way to use wxgleam is with the `with_app` function, which
 //// handles initialization and cleanup automatically. You can also combine it
 //// with `with_frame` and `with_button` for cleaner resource management:
 ////
 //// ```gleam
-//// import wx_gleam
+//// import wxgleam
 ////
 //// pub fn main() {
-////   use wx_app <- wx_gleam.with_app()
-////   use frame <- wx_gleam.with_frame(wx_app, "My App")
-////   use _button <- wx_gleam.with_button(frame, "Click Me!")
+////   use wx_app <- wxgleam.with_app()
+////   use frame <- wxgleam.with_frame(wx_app, "My App")
+////   use _button <- wxgleam.with_button(frame, "Click Me!")
 ////   
-////   wx_gleam.show_frame(frame)
-////   wx_gleam.connect_close_event(frame)
-////   wx_gleam.await_close_event(fn(_) { Nil })
+////   wxgleam.show_frame(frame)
+////   wxgleam.connect_close_event(frame)
+////   wxgleam.await_close_event(fn(_) { Nil })
 //// }
 //// ```
 ////
@@ -37,17 +37,17 @@
 //// For more control, you can manually initialize and destroy the wx application:
 ////
 //// ```gleam
-//// import wx_gleam
+//// import wxgleam
 ////
 //// pub fn main() {
-////   let assert Ok(wx_app) = wx_gleam.init_wx()
-////   let assert Ok(wx_frame) = wx_gleam.create_frame(wx_app, "My App")
-////   let assert Ok(_button) = wx_gleam.create_button(wx_frame, "Click Me!")
+////   let assert Ok(wx_app) = wxgleam.init_wx()
+////   let assert Ok(wx_frame) = wxgleam.create_frame(wx_app, "My App")
+////   let assert Ok(_button) = wxgleam.create_button(wx_frame, "Click Me!")
 ////   
-////   wx_gleam.show_frame(wx_frame)
-////   wx_gleam.connect_close_event(wx_frame)
-////   wx_gleam.await_close_event(fn(_) { Nil })
-////   wx_gleam.destroy()
+////   wxgleam.show_frame(wx_frame)
+////   wxgleam.connect_close_event(wx_frame)
+////   wxgleam.await_close_event(fn(_) { Nil })
+////   wxgleam.destroy()
 //// }
 //// ```
 ////
@@ -61,8 +61,8 @@
 import gleam/dynamic
 import gleam/io
 import gleam/result
-import wx_gleam/events
-import wx_gleam/internals
+import wxgleam/events
+import wxgleam/internals
 
 // --- Type definitions ---
 
@@ -185,7 +185,7 @@ pub fn init_wx() -> Result(WxApp, dynamic.Dynamic) {
 /// A convenience function that initializes the wx application, runs a mainloop,
 /// and cleans up automatically.
 ///
-/// This is the recommended way to use wx_gleam as it ensures proper resource
+/// This is the recommended way to use wxgleam as it ensures proper resource
 /// cleanup even if errors occur. The function handles the boilerplate of 
 /// initializing wx, running your application logic, and destroying the wx
 /// instance when done.
@@ -205,7 +205,7 @@ pub fn init_wx() -> Result(WxApp, dynamic.Dynamic) {
 /// ## Example
 ///
 /// ```gleam
-/// use wx_app <- wx_gleam.with_app()
+/// use wx_app <- wxgleam.with_app()
 /// let assert Ok(frame) = create_frame(wx_app, "My Window")
 /// show_frame(frame)
 /// connect_close_event(frame)
@@ -251,8 +251,8 @@ pub fn with_app(mainloop: fn(WxApp) -> Nil) -> Nil {
 /// ## Example
 ///
 /// ```gleam
-/// use wx_app <- wx_gleam.with_app()
-/// use frame <- wx_gleam.with_frame(wx_app, "My Window")
+/// use wx_app <- wxgleam.with_app()
+/// use frame <- wxgleam.with_frame(wx_app, "My Window")
 /// 
 /// let assert Ok(_button) = create_button(frame, "Click Me!")
 /// show_frame(frame)
@@ -300,9 +300,9 @@ pub fn with_frame(
 /// ## Example
 ///
 /// ```gleam
-/// use wx_app <- wx_gleam.with_app()
-/// use frame <- wx_gleam.with_frame(wx_app, "My Window")
-/// use button <- wx_gleam.with_button(frame, "Click Me!")
+/// use wx_app <- wxgleam.with_app()
+/// use frame <- wxgleam.with_frame(wx_app, "My Window")
+/// use button <- wxgleam.with_button(frame, "Click Me!")
 /// 
 /// // Button is now created and available
 /// show_frame(frame)
@@ -351,9 +351,9 @@ pub fn with_button(
 /// ## Example
 ///
 /// ```gleam
-/// use wx_app <- wx_gleam.with_app()
-/// use frame <- wx_gleam.with_frame(wx_app, "My Window")
-/// use text_ctrl <- wx_gleam.with_text_ctrl(frame, "Enter text here")
+/// use wx_app <- wxgleam.with_app()
+/// use frame <- wxgleam.with_frame(wx_app, "My Window")
+/// use text_ctrl <- wxgleam.with_text_ctrl(frame, "Enter text here")
 /// 
 /// // Text control is now created and available
 /// show_frame(frame)
@@ -402,9 +402,9 @@ pub fn with_text_ctrl(
 /// ## Example
 ///
 /// ```gleam
-/// use wx_app <- wx_gleam.with_app()
-/// use frame <- wx_gleam.with_frame(wx_app, "My Window")
-/// use checkbox <- wx_gleam.with_checkbox(frame, "Enable feature")
+/// use wx_app <- wxgleam.with_app()
+/// use frame <- wxgleam.with_frame(wx_app, "My Window")
+/// use checkbox <- wxgleam.with_checkbox(frame, "Enable feature")
 /// 
 /// // Checkbox is now created and available
 /// show_frame(frame)
@@ -665,7 +665,7 @@ pub fn connect_close_event(frame: WxFrame) -> WxFrame {
 /// ## Example
 ///
 /// ```gleam
-/// import wx_gleam/events
+/// import wxgleam/events
 /// import gleam/io
 ///
 /// // Simple case: ignore all events
