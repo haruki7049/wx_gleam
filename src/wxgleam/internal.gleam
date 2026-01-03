@@ -1,4 +1,3 @@
-import gleam/dynamic
 import gleam/erlang/atom
 
 pub type WxObject
@@ -19,3 +18,6 @@ pub fn equal(left: WxObject, right: WxObject) -> Bool
 
 @external(erlang, "wx", "getObjectType")
 pub fn get_object_type(object: WxObject) -> atom.Atom
+
+@external(erlang, "wx", "destroy")
+pub fn destroy() -> Nil

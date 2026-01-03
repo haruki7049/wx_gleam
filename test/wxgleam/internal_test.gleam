@@ -21,3 +21,7 @@ pub fn new_test() {
   |> internal.get_object_type()
   |> should.equal(atom.create("wx"))
 }
+
+pub fn destroy_test() {
+  internal.destroy()
+}
