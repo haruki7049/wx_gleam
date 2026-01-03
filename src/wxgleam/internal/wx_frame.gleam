@@ -6,7 +6,12 @@ pub fn default() -> wx.WxObject
 pub type NewOption
 
 @external(erlang, "wxFrame", "new")
-pub fn new(parent: wx.WxObject, id: Int, title: BitArray, options: List(NewOption)) -> wx.WxObject
+pub fn new(
+  parent: wx.WxObject,
+  id: Int,
+  title: BitArray,
+  options: List(NewOption),
+) -> wx.WxObject
 
 pub type ShowOption
 
